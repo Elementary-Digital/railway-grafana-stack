@@ -1,2 +1,5 @@
 # example deps
 node_modules/
+
+# macOS
+.DS_Store
