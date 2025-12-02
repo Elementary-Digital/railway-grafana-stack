@@ -1,0 +1,38 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'routeroyal-production'
+    environment: 'production'
+
+scrape_configs:
+  # RouteRoyal API - Production
+  - job_name: 'routeroyal-api'
+    metrics_path: /metrics
+    scheme: https
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['api.routeroyal.com']
+        labels:
+          service: 'routeroyal-api'
+          environment: 'production'
+          job: 'api'
+    
+  # RabbitMQ - Production (update with your actual RabbitMQ service name)
+  # Uncomment and update if you have RabbitMQ metrics exposed
+  # - job_name: 'rabbitmq'
+  #   metrics_path: /metrics
+  #   scrape_interval: 5s
+  #   static_configs:
+  #     - targets: ['<your-rabbitmq-service>.railway.internal:15692']
+  #       labels:
+  #         service: 'rabbitmq'
+  #         environment: 'production'
+    
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+          environment: 'production'
