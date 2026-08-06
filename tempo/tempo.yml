@@ -1,19 +1,10 @@
 server:
   http_listen_port: 3200
 
-compactor:
-  compaction:
-    compaction_window: 1h
-
-storage:
-  trace:
-    backend: local
-    local:
-      path: /var/tempo/traces
-
 distributor:
+  # Span payload logging is expensive and noisy in production.
   log_received_spans:
-        enabled: true
+    enabled: false
   receivers:
     otlp:
       protocols:
@@ -21,3 +12,26 @@ distributor:
           endpoint: "0.0.0.0:4317"
         http:
           endpoint: "0.0.0.0:4318"
+
+ingester:
+  # Flush traces out of memory more aggressively to limit RAM growth.
+  trace_idle_period: 10s
+  max_block_duration: 5m
+
+compactor:
+  compaction:
+    compaction_window: 1h
+    max_block_bytes: 104857600
+    # Keep only one day of traces on the Railway volume.
+    # Older blocks are deleted by compaction — primary cost control for this service.
+    block_retention: 24h
+    compacted_block_retention: 1h
+
+storage:
+  trace:
+    backend: local
+    wal:
+      path: /var/tempo/wal
+    local:
+      # Keep existing mount path so the current volume remains valid.
+      path: /var/tempo/traces
