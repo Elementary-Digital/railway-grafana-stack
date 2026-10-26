@@ -13,3 +13,5 @@ USER root
 COPY tempo.yml /etc/tempo/tempo.yml
 
 CMD ["-config.file=/etc/tempo/tempo.yml"]
+
+# Deployment refresh: 26 October 2026 after Railway billing recovery.
