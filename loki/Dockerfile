@@ -13,3 +13,4 @@ USER root
 
 # Command to run Loki
 CMD ["-config.file=/etc/loki/loki-confi.yaml"]
+# Deployment refresh: 26 October 2026 after Railway billing recovery.
